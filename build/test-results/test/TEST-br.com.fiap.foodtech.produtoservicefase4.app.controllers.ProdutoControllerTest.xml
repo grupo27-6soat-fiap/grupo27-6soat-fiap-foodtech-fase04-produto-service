@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-12-03T00:11:03" hostname="DESKTOP-FELIPE" time="0.445">
+  <properties/>
+  <testcase name="createProduto_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.389"/>
+  <testcase name="getProdutoById_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.01"/>
+  <testcase name="updateProduto_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.01"/>
+  <testcase name="postProduto_Exception()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.008"/>
+  <testcase name="getProdutoById_EntityNotFoundException()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.005"/>
+  <testcase name="deleteProduto_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.005"/>
+  <testcase name="searchProdutoByCategoria_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.app.controllers.ProdutoControllerTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

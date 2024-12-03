@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: br.com.fiap.foodtech.produtoservicefase4.Produtoservicefase4
+ Application
+

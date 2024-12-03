@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.fiap.foodtech.produtoservicefase4.domain.usecase.GetProdutoByIdUsecaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-12-03T00:11:04" hostname="DESKTOP-FELIPE" time="0.005">
+  <properties/>
+  <testcase name="getProdutoById_HappyPath()" classname="br.com.fiap.foodtech.produtoservicefase4.domain.usecase.GetProdutoByIdUsecaseTest" time="0.002"/>
+  <testcase name="getProdutoById_NullId()" classname="br.com.fiap.foodtech.produtoservicefase4.domain.usecase.GetProdutoByIdUsecaseTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

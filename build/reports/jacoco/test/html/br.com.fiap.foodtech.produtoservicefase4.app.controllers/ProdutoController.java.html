@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProdutoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">produto-service</a> &gt; <a href="index.source.html" class="el_package">br.com.fiap.foodtech.produtoservicefase4.app.controllers</a> &gt; <span class="el_source">ProdutoController.java</span></div><h1>ProdutoController.java</h1><pre class="source lang-java linenums">package br.com.fiap.foodtech.produtoservicefase4.app.controllers;
+
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import br.com.fiap.foodtech.produtoservicefase4.app.dto.ProdutoDto;
+import br.com.fiap.foodtech.produtoservicefase4.app.exception.EnumValidationException;
+import br.com.fiap.foodtech.produtoservicefase4.domain.entities.Produto;
+import br.com.fiap.foodtech.produtoservicefase4.domain.enums.CategoriaEnum;
+import br.com.fiap.foodtech.produtoservicefase4.domain.usecase.*;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(&quot;/produtos&quot;)
+@RequiredArgsConstructor
+
+public class ProdutoController {
+
+	private final GetProdutoByIdUsecase getProdutoByIdUsecase;
+
+	private final FindProdutoByCategoriaUsecase findProdutoByCategoriaUsecase;
+
+	private final CreateProdutoUsecase createProdutoUsecase;
+
+	private final UpdateProdutoUsecase updateProdutoUsecase;
+
+	private final DeleteProdutoUsecase deleteProdutoUsecase;
+
+
+	private final ModelMapper modelMapper;
+
+	@GetMapping(value = &quot;/{id}&quot;)
+	public ResponseEntity&lt;ProdutoDto&gt; get(@PathVariable(value = &quot;id&quot;) Long id) {
+<span class="fc" id="L47">		Produto produto = Optional.ofNullable(getProdutoByIdUsecase.get(id))</span>
+<span class="fc" id="L48">				.orElseThrow(() -&gt; new EntityNotFoundException(&quot;Produto nao encontrado para o id :: &quot; + id));</span>
+
+<span class="fc" id="L50">		HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L51">		headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="fc" id="L52">		headers.add(&quot;X-Content-Type-Options&quot;, &quot;nosniff&quot;);</span>
+<span class="fc" id="L53">		return ResponseEntity.ok().headers(headers).body(modelMapper.map(produto, ProdutoDto.class));</span>
+	}
+
+	@GetMapping
+	public ResponseEntity&lt;List&lt;ProdutoDto&gt;&gt; search(
+			@RequestParam(name = &quot;categoria&quot;, required = false) String categoria) {
+<span class="fc" id="L59">		CategoriaEnum categoriaEnum = null;</span>
+
+		try {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">			if (Objects.nonNull(categoria)) {</span>
+<span class="fc" id="L63">				categoriaEnum = CategoriaEnum.valueOf(categoria);</span>
+			}
+<span class="fc" id="L65">		} catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L66">			throw new EnumValidationException(&quot;categoria&quot;, categoria);</span>
+<span class="fc" id="L67">		}</span>
+
+<span class="fc" id="L69">		List&lt;ProdutoDto&gt; produtos = findProdutoByCategoriaUsecase.findByCategoria(categoriaEnum).stream()</span>
+<span class="fc" id="L70">				.map(produto -&gt; modelMapper.map(produto, ProdutoDto.class)).toList();</span>
+
+
+
+<span class="fc" id="L74">				HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L75">				headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="fc" id="L76">				headers.add(&quot;X-Content-Type-Options&quot;, &quot;nosniff&quot;);</span>
+
+<span class="fc" id="L78">		return ResponseEntity.ok().headers(headers).body(produtos);</span>
+	}
+
+	@PostMapping
+	public ResponseEntity&lt;ProdutoDto&gt; post(@Validated @RequestBody ProdutoDto produtoDTO) {
+<span class="fc" id="L83">		Produto produto = createProdutoUsecase.create(modelMapper.map(produtoDTO, Produto.class));</span>
+<span class="fc" id="L84">		return new ResponseEntity&lt;ProdutoDto&gt;(modelMapper.map(produto, ProdutoDto.class), HttpStatus.CREATED);</span>
+	}
+
+	@PutMapping(value = &quot;/{id}&quot;)
+	public ResponseEntity&lt;ProdutoDto&gt; put(@PathVariable Long id, @Validated @RequestBody ProdutoDto produtoDTO) {
+<span class="fc" id="L89">		Produto produto = updateProdutoUsecase.update(id, modelMapper.map(produtoDTO, Produto.class));</span>
+
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">		if (Objects.nonNull(produto)) {</span>
+<span class="fc" id="L92">			return ResponseEntity.ok(modelMapper.map(produto, ProdutoDto.class));</span>
+		}
+
+<span class="nc" id="L95">		return ResponseEntity.notFound().build();</span>
+
+	}
+
+	@DeleteMapping(value = &quot;/{id}&quot;)
+	public ResponseEntity&lt;Void&gt; delete(@PathVariable(value = &quot;id&quot;) Long id) {
+<span class="fc" id="L101">		Produto produto = Optional.ofNullable(getProdutoByIdUsecase.get(id))</span>
+<span class="pc" id="L102">				.orElseThrow(() -&gt; new EntityNotFoundException(&quot;Produto nao encontrado para o id :: &quot; + id));</span>
+<span class="fc" id="L103">		deleteProdutoUsecase.delete(produto);</span>
+<span class="fc" id="L104">		return ResponseEntity.noContent().&lt;Void&gt;build();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
