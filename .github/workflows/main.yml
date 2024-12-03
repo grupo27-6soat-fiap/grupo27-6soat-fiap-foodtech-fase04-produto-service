@@ -64,6 +64,8 @@ jobs:
             # -Dsonar.host.url=https://sonarcloud.io \
             # -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
 
+      - name: Exibir relatório de problemas do Gradle
+        run: cat build/reports/problems/problems-report.html
 
       - name: Upload Problems Report
         uses: actions/upload-artifact@v3
