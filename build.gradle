@@ -66,21 +66,17 @@ sonar {
 }
 
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = true
-		xml.outputLocation = file("$buildDir/reports/jacoco/test/jacocoTestReport.xml")
-
-	}
-
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: ['**/sun/**', '**/com/sun/**', '**/*$*'])
-		}))
-	}
+    toolVersion = "0.8.10" // Verifique a versão mais recente
 }
 
-
+tasks.jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(true)   // Necessário para SonarCloud
+        html.required.set(false)
+        csv.required.set(false)
+    }
+}
 
 jar {
 	manifest {
