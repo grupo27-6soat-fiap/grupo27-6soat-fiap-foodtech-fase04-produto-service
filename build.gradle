@@ -69,15 +69,17 @@ tasks.jacocoTestReport {
     dependsOn test
 
     reports {
-        xml.required.set(true)  // Forma moderna
+        xml.required.set(true)
         xml.outputLocation.set(file("$buildDir/reports/jacoco/test/jacocoTestReport.xml"))
     }
 
-    doLast {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['**/sun/**', '**/com/sun/**', '**/*$*'])
-        }))
-    }
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.collect {
+                fileTree(dir: it, exclude: ['**/sun/**', '**/com/sun/**', '**/*$*'])
+            }
+        )
+    )
 }
 
 jar {
