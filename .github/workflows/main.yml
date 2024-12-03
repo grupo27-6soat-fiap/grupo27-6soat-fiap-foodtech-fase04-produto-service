@@ -44,7 +44,12 @@ jobs:
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar-${{ hashFiles('**/*.java') }}
-       
+        
+      - name: Run Tests and Generate Coverage Report
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean test jacocoTestReport
+
       - name: Build and analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Token armazenado como segredo no GitHub
