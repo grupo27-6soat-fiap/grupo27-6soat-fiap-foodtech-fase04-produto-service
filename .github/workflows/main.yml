@@ -41,8 +41,10 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew clean build jacocoTestReport sonarqube
+          ./gradlew clean build jacocoTestReport sonar
 
+      - name: Exibir relatório de problemas do Gradle
+        run: cat build/reports/problems/problems-report.html
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v3
