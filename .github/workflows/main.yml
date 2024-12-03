@@ -10,12 +10,14 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build and Sonar Scan
     runs-on: ubuntu-latest
     steps:
+      # Checkout do código
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Configurar JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -26,19 +28,30 @@ jobs:
       - name: Grant execute permission for Gradlew
         run: chmod +x ./gradlew
 
-        
+      # Limpar e construir o projeto
       - name: Build with Gradle
-        run: |
-          ./gradlew build --warning-mode all
-          
-          
-      - name: Run JaCoCo
+        run: ./gradlew clean build --warning-mode all
+
+      # Executar testes e gerar relatório Jacoco
+      - name: Run Tests and Generate JaCoCo Report
         run: ./gradlew test jacocoTestReport
 
-      - name: List JaCoCo Report
+      # Verificar se o relatório Jacoco foi gerado
+      - name: Verify JaCoCo Report
         run: ls -alh build/reports/jacoco/test/
 
-      - name: SonarQube Scan
-        run: ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml --warning-mode all
+      # Executar análise no SonarCloud
+      - name: SonarCloud Scan
+        run: |
+          ./gradlew sonarqube \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml \
+            --info
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # Publicar cobertura no Sonar
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/jacocoTestReport.xml
