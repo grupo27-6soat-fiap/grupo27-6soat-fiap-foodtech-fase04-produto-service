@@ -1,0 +1,21 @@
+architectures:
+  - name: "core"
+    description: "Core module of the application"
+    sources: "src/main/java"
+    dependencies:
+      - "web"
+  
+  - name: "web"
+    description: "Web layer of the application"
+    sources: "src/main/webapp"
+    dependencies:
+      - "core"
+
+rules:
+  # Você pode definir regras para evitar dependências cíclicas ou regras específicas
+  - name: "No cyclic dependencies"
+    description: "No cyclic dependencies should exist between modules"
+    rule: "no-cycle"
+  - name: "No direct dependencies between core and web"
+    description: "Core should not depend on the web module"
+    rule: "no-core-web-dependencies"
