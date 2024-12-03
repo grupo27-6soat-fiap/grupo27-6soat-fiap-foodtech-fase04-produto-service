@@ -48,7 +48,7 @@ jobs:
       - name: Run Tests and Generate Coverage Report
         run: |
           chmod +x ./gradlew
-          ./gradlew clean test jacocoTestReport --warning-mode=all
+          ./gradlew clean test jacocoTestReport --warning-mode=all --stacktrace
 
 
       - name: Build and analyze with SonarCloud
