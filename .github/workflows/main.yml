@@ -60,5 +60,11 @@ jobs:
             -Dsonar.projectKey=grupo27-6soat-fiap_produto-fase04 \
             -Dsonar.organization=grupo27-6soat-fiap \
             -Dsonar.host.url=https://sonarcloud.io
-          
+
+      - name: Upload Problems Report
+        uses: actions/upload-artifact@v3
+        with:
+           name: problems-report
+           path: build/reports/problems/problems-report.html
+
 # sed -i.bak "s|jdbc:postgresql://postgres-svc:5432/postgres|jdbc:postgresql://$RDS_HOSTNAME:5432/postgres|g" k8s/deployment-app.yml && \
