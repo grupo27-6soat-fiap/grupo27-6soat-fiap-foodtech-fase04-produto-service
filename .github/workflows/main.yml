@@ -22,9 +22,15 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      # Conceder permissão de execução ao gradlew
+      - name: Grant execute permission for Gradlew
+        run: chmod +x ./gradlew
+
+        
       - name: Build with Gradle
         run: |
           ./gradlew build --warning-mode all
+          
           
       - name: Run JaCoCo
         run: ./gradlew test jacocoTestReport
